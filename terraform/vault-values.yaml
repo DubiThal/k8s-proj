@@ -14,9 +14,6 @@ server:
       api_addr = "http://127.0.0.1:8200"
       ui = true
 
-  extraArgs:
-    - "-log-level=debug"
-
   dataStorage:
     enabled: true
     size: 1Gi

@@ -14,6 +14,18 @@ resource "kubernetes_namespace" "monitoring" {
   }
 }
 
+resource "kubernetes_namespace" "vault" {
+  metadata {
+    name = "vault"
+  }
+}
+
+resource "kubernetes_namespace" "jenkins" {
+  metadata {
+    name = "jenkins"
+  }
+}
+
 resource "helm_release" "prometheus" {
   name             = "prometheus"
   repository       = "https://prometheus-community.github.io/helm-charts"
@@ -21,6 +33,7 @@ resource "helm_release" "prometheus" {
   namespace        = kubernetes_namespace.monitoring.metadata[0].name
   create_namespace = false
   values           = [file("${path.module}/prometheus-values.yaml")]
+  timeout    = 300
 }
 
 resource "helm_release" "grafana" {
@@ -36,7 +49,16 @@ resource "helm_release" "vault" {
   name       = "vault"
   repository = "https://helm.releases.hashicorp.com"
   chart      = "vault"
-  namespace  = kubernetes_namespace.monitoring.metadata[0].name
+  namespace  = kubernetes_namespace.vault.metadata[0].name
   values     = [file("${path.module}/vault-values.yaml")]
+}
+
+resource "helm_release" "jenkins" {
+  name       = "jenkins"
+  repository = "https://charts.jenkins.io"
+  chart      = "jenkins"
+  namespace  = kubernetes_namespace.jenkins.metadata[0].name
+  values     = [file("${path.module}/jenkins-values.yaml")]
+  timeout    = 300
 }
 

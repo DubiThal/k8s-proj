@@ -1,0 +1,26 @@
+controller:
+  admin:
+    Username: admin
+    Password: admin
+
+  serviceType: NodePort
+  nodePort: 30080
+
+  image:
+    tag: "lts-jdk21"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - configuration-as-code
+    - blueocean
+
