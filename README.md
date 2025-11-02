@@ -56,3 +56,6 @@ The Jenkins pipeline (defined in `Jenkinsfile`) performs the following:
 - 🔜 Integrate Prometheus & Grafana for monitoring
 - 🔜 Use a lightweight K8s solution 
 - 🔜 Store configuration/secrets with AWS SSM or Secrets Manager
+
+### AI Assistance
+This project was developed with occasional assistance from AI tools including ChatGPT, Claude, Gemini, and GitHub Copilot.
