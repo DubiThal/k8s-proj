@@ -34,6 +34,7 @@ resource "helm_release" "prometheus" {
   create_namespace = false
   values           = [file("${path.module}/prometheus-values.yaml")]
   timeout    = 300
+  depends_on       = [kubernetes_namespace.monitoring]
 }
 
 resource "helm_release" "grafana" {
@@ -42,7 +43,7 @@ resource "helm_release" "grafana" {
   chart      = "grafana"
   namespace  = kubernetes_namespace.monitoring.metadata[0].name
   values     = [file("${path.module}/grafana-values.yaml")]
-  depends_on = [helm_release.prometheus]
+  depends_on = [helm_release.prometheus, kubernetes_namespace.monitoring]
 }
 
 resource "helm_release" "vault" {
@@ -51,6 +52,7 @@ resource "helm_release" "vault" {
   chart      = "vault"
   namespace  = kubernetes_namespace.vault.metadata[0].name
   values     = [file("${path.module}/vault-values.yaml")]
+  depends_on = [kubernetes_namespace.vault]
 }
 
 resource "helm_release" "jenkins" {
@@ -60,5 +62,5 @@ resource "helm_release" "jenkins" {
   namespace  = kubernetes_namespace.jenkins.metadata[0].name
   values     = [file("${path.module}/jenkins-values.yaml")]
   timeout    = 300
+  depends_on = [kubernetes_namespace.jenkins]
 }
-

@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE = "dubithal/weather-app"
+        FLASK_IMAGE = "dubithal/k8s-weather-app"
     }
     
     stages {
@@ -16,8 +16,8 @@ pipeline {
         stage('Build') {
             steps {
                 dir('app') {
-                    sh "docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} ."
-                    sh "docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest"
+                    sh "docker build -t ${FLASK_IMAGE}:${BUILD_NUMBER} ."
+                    sh "docker tag ${FLASK_IMAGE}:${BUILD_NUMBER} ${FLASK_IMAGE}:latest"
                 }
             }
         }
@@ -30,8 +30,8 @@ pipeline {
         
         stage('Push') {
             steps {
-                sh "docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}"
-                sh "docker push ${DOCKER_IMAGE}:latest"
+                sh "docker push ${FLASK_IMAGE}:${BUILD_NUMBER}"
+                sh "docker push ${FLASK_IMAGE}:latest"
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
                 sh "kubectl apply -f k8s/"
                 
                 // Trigger a rollout of the new image version
-                sh "kubectl set image deployment/weather-app-deployment weather-app=${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                sh "kubectl set image deployment/weather-app-deployment weather-app=${FLASK_IMAGE}:${BUILD_NUMBER}"
             }
         }
     }

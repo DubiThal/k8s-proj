@@ -6,8 +6,10 @@ controller:
   serviceType: NodePort
   nodePort: 30080
 
+  # Point to your custom image on DockerHub
   image:
-    tag: "lts-jdk21"
+    repository: "dubithal/k8s-jenkins-controller" 
+    tag: "latest"
 
   resources:
     requests:
@@ -23,4 +25,3 @@ controller:
     - git
     - configuration-as-code
     - blueocean
-
