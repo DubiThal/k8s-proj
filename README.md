@@ -1,30 +1,20 @@
 # 🌤️ K8S for Weather Forecast App – DevOps Project by Dubi Thal
 
 ## 🎯 Overview
-This is a Flask-based weather forecast web application deployed in a Docker container on an AWS EC2 instance. The project uses Jenkins for CI/CD and Terraform for infrastructure management. GitHub and DockerHub are integrated for version control and image storage.
+This project is a Flask-based weather forecast web application, fully containerized using Docker. It features a complete CI/CD pipeline managed by Jenkins and is designed for eventual deployment to a Kubernetes cluster.
 **Weather data is retrieved via the [OpenWeatherMap API](https://openweathermap.org/api).**
-
-## 🧱 Infrastructure Setup
-- **Cloud Provider**: AWS (Free Tier)
-- **Provisioning Tool**: Terraform
-
-**Resources Created**:
-- VPC
-- Subnet
-- Internet Gateway
-- Security Group
-- EC2 Instance (Amazon Linux 2) – named "jenkins" but used to run both Jenkins and the Flask app
 
 ## ⚙️ Tools & Technologies
 | Tool        | Purpose                         |
 |-------------|----------------------------------|
 | Flask       | Web framework for Python        |
 | Docker      | Containerization                |
+| Docker Compose | Local environment orchestration |
 | Jenkins     | CI/CD server (running in Docker)|
 | Git         | Version control                 |
 | GitHub      | Source code hosting             |
 | DockerHub   | Image repository                |
-| Terraform   | Infrastructure-as-Code          |
+| Kubernetes  | Container Orchestration (Target) |
 | NGINX       | Reverse proxy and HTTPS support |
 
 ## 🐳 Docker Setup
@@ -38,24 +28,24 @@ NGINX serves as a secure reverse proxy for the Flask app (port 443) and handles 
 
 ## 🔁 CI/CD Pipeline (Jenkins)
 The Jenkins pipeline (defined in `Jenkinsfile`) performs the following:
-- Clones the GitHub repository
-- Builds the Docker image for the Flask app
-- Pushes the image to DockerHub
-- *(Upcoming)* Deploys to Kubernetes using manifests stored in `k8s/`
+- ✅ Clones the GitHub repository
+- ✅ Builds the Docker image for the Flask app
+- ✅ Pushes the tagged image to DockerHub
+- 🔜 Deploys to Kubernetes using manifests from the `k8s/` directory
 
 ## 🚀 Additional Features Implemented
 - ✅ HTTPS support via Let's Encrypt and NGINX
 - ✅ Reverse proxy for Flask via NGINX (port 443)
 - ✅ Split docker-compose files for Jenkins and Flask/NGINX
-- ✅ EC2 infrastructure provisioned with Terraform
 - ✅ CI/CD pipeline running inside Dockerized Jenkins
 - ✅ Environment variables and `.env` support in Flask app
 - ✅ K8s manifests prepared for deployment (Minikube testing in progress)
 
-- 🔜 Run automated tests (e.g., Pytest)
-- 🔜 Integrate Prometheus & Grafana for monitoring
-- 🔜 Use a lightweight K8s solution 
-- 🔜 Store configuration/secrets with AWS SSM or Secrets Manager
+## 🗺️ Next Steps
+- **Automated Testing**: Implement a `test` stage in the Jenkins pipeline using Pytest.
+- **Kubernetes Deployment**: Finalize the `Deploy` stage in the Jenkinsfile to apply the `k8s/` manifests to a cluster.
+- **Monitoring**: Integrate Prometheus & Grafana for application and cluster monitoring.
+- **Secrets Management**: Implement a robust secrets solution like HashiCorp Vault or native Kubernetes Secrets.
 
 ### AI Assistance
 This project was developed with occasional assistance from AI tools including ChatGPT, Claude, Gemini, and GitHub Copilot.

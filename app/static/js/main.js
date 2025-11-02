@@ -43,17 +43,19 @@ function getWeather() {
                 
                 // Process forecast data
                 const forecastByDay = {};
+                // Group all forecasts by date
                 data.forecast.list.forEach(item => {
-                    // Get date without time
                     const date = item.dt_txt.split(' ')[0];
                     if (!forecastByDay[date]) {
-                        forecastByDay[date] = item;
+                        forecastByDay[date] = [];
                     }
+                    forecastByDay[date].push(item);
                 });
                 
                 // Add forecast items
-                Object.keys(forecastByDay).forEach(date => {
-                    const forecast = forecastByDay[date];
+                Object.keys(forecastByDay).slice(0, 5).forEach(date => {
+                    // Use the forecast closest to midday (12:00) for a representative temp
+                    const forecast = forecastByDay[date].find(f => f.dt_txt.includes("12:00:00")) || forecastByDay[date][0];
                     const formattedDate = new Date(date).toLocaleDateString('en-US', { 
                         weekday: 'short', 
                         month: 'short', 
