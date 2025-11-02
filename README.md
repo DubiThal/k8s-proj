@@ -15,16 +15,14 @@ This project is a Flask-based weather forecast web application, fully containeri
 | GitHub      | Source code hosting             |
 | DockerHub   | Image repository                |
 | Kubernetes  | Container Orchestration (Target) |
-| NGINX       | Reverse proxy and HTTPS support |
 
 ## 🐳 Docker Setup
 The project contains two Docker Compose setups:
 
-- **app/** – Contains the Flask application and NGINX reverse proxy.
+- **app/** – Contains the Flask application
 - **jenkins/** – Contains the Jenkins server, fully Dockerized with customized Dockerfile and plugins.
 
 Jenkins is configured via Docker Compose and listens on port 8080.
-NGINX serves as a secure reverse proxy for the Flask app (port 443) and handles HTTPS via Let's Encrypt certificates.
 
 ## 🔁 CI/CD Pipeline (Jenkins)
 The Jenkins pipeline (defined in `Jenkinsfile`) performs the following:
@@ -34,8 +32,6 @@ The Jenkins pipeline (defined in `Jenkinsfile`) performs the following:
 - 🔜 Deploys to Kubernetes using manifests from the `k8s/` directory
 
 ## 🚀 Additional Features Implemented
-- ✅ HTTPS support via Let's Encrypt and NGINX
-- ✅ Reverse proxy for Flask via NGINX (port 443)
 - ✅ Split docker-compose files for Jenkins and Flask/NGINX
 - ✅ CI/CD pipeline running inside Dockerized Jenkins
 - ✅ Environment variables and `.env` support in Flask app
