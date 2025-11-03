@@ -3,6 +3,9 @@ server:
     runAsNonRoot: true
     runAsUser: 65534
 
+  podSecurityContext:
+    fsGroup: 65534
+
   resources:
     limits:
       cpu: 500m
@@ -10,4 +13,3 @@ server:
     requests:
       cpu: 200m
       memory: 256Mi
-

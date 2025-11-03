@@ -26,6 +26,6 @@ spec:
       serviceAccountName: flask-service-account
       containers:
         - name: flask-container
-          image: dubithal/flask-app:latest
+          image: dubithal/k8s-weather-app:latest 
           ports:
             - containerPort: 5000

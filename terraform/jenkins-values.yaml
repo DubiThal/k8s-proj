@@ -3,10 +3,12 @@ controller:
     Username: admin
     Password: admin
 
+  podSecurityContext:
+    fsGroup: 1000
+
   serviceType: NodePort
   nodePort: 30080
 
-  # Point to your custom image on DockerHub
   image:
     repository: "dubithal/k8s-jenkins-controller" 
     tag: "latest"
