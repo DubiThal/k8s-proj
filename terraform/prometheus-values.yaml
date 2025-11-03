@@ -2,9 +2,12 @@ server:
   securityContext:
     runAsNonRoot: true
     runAsUser: 65534
-
   podSecurityContext:
     fsGroup: 65534
+
+  initChown:
+    podSecurityContext:
+      fsGroup: 65534
 
   resources:
     limits:
@@ -13,3 +16,6 @@ server:
     requests:
       cpu: 200m
       memory: 256Mi
+
+  extraArgs:
+    enable-feature: "active-query-tracker"

@@ -3,9 +3,6 @@ controller:
     Username: admin
     Password: admin
 
-  podSecurityContext:
-    fsGroup: 1000
-
   serviceType: NodePort
   nodePort: 30080
 
@@ -27,3 +24,8 @@ controller:
     - git
     - configuration-as-code
     - blueocean
+
+  initContainer:
+    command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home && echo 'Permissions fixed'"]
+    securityContext:
+      runAsUser: 0

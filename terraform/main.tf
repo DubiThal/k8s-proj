@@ -26,25 +26,25 @@ resource "kubernetes_namespace" "jenkins" {
   }
 }
 
-resource "helm_release" "prometheus" {
-  name             = "prometheus"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "prometheus"
-  namespace        = kubernetes_namespace.monitoring.metadata[0].name
-  create_namespace = false
-  values           = [file("${path.module}/prometheus-values.yaml")]
-  timeout    = 300
-  depends_on       = [kubernetes_namespace.monitoring]
-}
+# resource "helm_release" "prometheus" {
+#   name             = "prometheus"
+#   repository       = "https://prometheus-community.github.io/helm-charts"
+#   chart            = "prometheus"
+#   namespace        = kubernetes_namespace.monitoring.metadata[0].name
+#   create_namespace = false
+#   values           = [file("${path.module}/prometheus-values.yaml")]
+#   timeout    = 90
+#   depends_on       = [kubernetes_namespace.monitoring]
+# }
 
-resource "helm_release" "grafana" {
-  name       = "grafana"
-  repository = "https://grafana.github.io/helm-charts"
-  chart      = "grafana"
-  namespace  = kubernetes_namespace.monitoring.metadata[0].name
-  values     = [file("${path.module}/grafana-values.yaml")]
-  depends_on = [helm_release.prometheus, kubernetes_namespace.monitoring]
-}
+#resource "helm_release" "grafana" {
+#  name       = "grafana"
+#  repository = "https://grafana.github.io/helm-charts"
+#  chart      = "grafana"
+#  namespace  = kubernetes_namespace.monitoring.metadata[0].name
+#  values     = [file("${path.module}/grafana-values.yaml")]
+#  depends_on = [kubernetes_namespace.monitoring]
+#}
 
 resource "helm_release" "vault" {
   name       = "vault"
@@ -61,6 +61,6 @@ resource "helm_release" "jenkins" {
   chart      = "jenkins"
   namespace  = kubernetes_namespace.jenkins.metadata[0].name
   values     = [file("${path.module}/jenkins-values.yaml")]
-  timeout    = 300
+  timeout    = 600
   depends_on = [kubernetes_namespace.jenkins]
 }
