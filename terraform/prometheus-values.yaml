@@ -1,21 +1,9 @@
+alertmanager:
+  persistentVolume:
+    enabled: true
+    storageClass: "local-path"
+
 server:
-  securityContext:
-    runAsNonRoot: true
-    runAsUser: 65534
-  podSecurityContext:
-    fsGroup: 65534
-
-  initChown:
-    podSecurityContext:
-      fsGroup: 65534
-
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 200m
-      memory: 256Mi
-
-  extraArgs:
-    enable-feature: "active-query-tracker"
+  persistentVolume:
+    enabled: true
+    storageClass: "local-path"

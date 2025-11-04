@@ -1,4 +1,8 @@
 controller:
+  serviceAccount:
+    create: true
+    name: "jenkins-controller"
+
   admin:
     Username: admin
     Password: admin
@@ -7,7 +11,7 @@ controller:
   nodePort: 30080
 
   image:
-    repository: "dubithal/k8s-jenkins-controller" 
+    repository: "dubithal/k8s-jenkins-controller"
     tag: "latest"
 
   resources:
@@ -24,8 +28,17 @@ controller:
     - git
     - configuration-as-code
     - blueocean
+  readinessProbe:
+    initialDelaySeconds: 120 
+    timeoutSeconds: 10
+    periodSeconds: 15
 
-  initContainer:
-    command: ["sh", "-c", "chown -R 1000:1000 /var/jenkins_home && echo 'Permissions fixed'"]
-    securityContext:
-      runAsUser: 0
+persistence:
+  enabled: true
+  size: "8Gi"
+  storageClassName: "local-path"
+  # When using local-path-provisioner, the volume is mounted with root permissions.
+  # We need to run an init container as root to chown the volume to the jenkins user (1000).
+  securityContext:
+    runAsUser: 0
+    fsGroup: 1000

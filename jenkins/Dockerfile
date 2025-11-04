@@ -15,8 +15,6 @@ RUN apt-get update && \
         git \
         curl \
         python3-pip \
-        groff \
-        less \
         unzip && \
     curl -LO "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
@@ -24,8 +22,7 @@ RUN apt-get update && \
     install -o root -g root -m 0755 helm /usr/local/bin/helm && \
     usermod -aG docker jenkins && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* kubectl helm
-
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* kubectl helm
 
 RUN jenkins-plugin-cli --plugins \
     git \
