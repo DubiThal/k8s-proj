@@ -98,7 +98,7 @@ resource "helm_release" "jenkins" {
   chart      = "jenkins"
   namespace  = kubernetes_namespace.jenkins.metadata[0].name
   values     = [file("${path.module}/jenkins-values.yaml")]
-  timeout    = 100
+  timeout    = 300
   depends_on = [
     kubernetes_namespace.jenkins,
     kubernetes_manifest.local_path_provisioner

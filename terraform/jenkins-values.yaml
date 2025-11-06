@@ -3,16 +3,28 @@ controller:
     create: true
     name: "jenkins-controller"
 
-  admin:
-    Username: admin
-    Password: admin
-
-  serviceType: NodePort
-  nodePort: 30080
+  rbac:
+    create: true
+    readSecrets: true
 
   image:
     repository: "dubithal/k8s-jenkins-controller"
     tag: "latest"
+
+  installPlugins: []
+  initializeOnce: true
+  overwritePluginsFromImage: false
+
+  usePodSecurityContext: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+  persistence:
+    defaultVolumePermissions:
+      enabled: true   
+
+  serviceType: NodePort
+  nodePort: 30080
 
   resources:
     requests:
@@ -22,23 +34,12 @@ controller:
       cpu: "500m"
       memory: "512Mi"
 
-  installPlugins:
-    - kubernetes
-    - workflow-aggregator
-    - git
-    - configuration-as-code
-    - blueocean
   readinessProbe:
-    initialDelaySeconds: 120 
+    initialDelaySeconds: 120
     timeoutSeconds: 10
     periodSeconds: 15
 
 persistence:
   enabled: true
   size: "8Gi"
-  storageClassName: "local-path"
-  # When using local-path-provisioner, the volume is mounted with root permissions.
-  # We need to run an init container as root to chown the volume to the jenkins user (1000).
-  securityContext:
-    runAsUser: 0
-    fsGroup: 1000
+  storageClass: "local-path"
