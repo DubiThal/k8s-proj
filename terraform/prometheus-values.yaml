@@ -7,3 +7,7 @@ server:
   persistentVolume:
     enabled: true
     storageClass: "local-path"
+  
+  service:
+    type: NodePort
+    port: 80

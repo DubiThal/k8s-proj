@@ -39,7 +39,9 @@ pipeline {
             steps {
                 echo "Deploying application to Kubernetes..."
                 sh "kubectl apply -f k8s/"
-                sh "kubectl set image deployment/k8s-weather-app-deployment weather-app=${FLASK_IMAGE}:${BUILD_NUMBER}"
+                sh "kubectl rollout restart deployment/k8s-weather-app-deployment"
+                sh "kubectl rollout status deployment/k8s-weather-app-deployment"
+                echo "Application deployed successfully!"
             }
         }
     }

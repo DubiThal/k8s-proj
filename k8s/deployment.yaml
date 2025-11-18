@@ -29,3 +29,8 @@ spec:
           image: dubithal/k8s-weather-app:latest 
           ports:
             - containerPort: 5000
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "500m"
