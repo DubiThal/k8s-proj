@@ -35,7 +35,7 @@ pipeline {
         stage('Login to DockerHub') {
             steps {
                 container('dind') {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'echo $DOCKERHUB_CREDENTIALS | docker login -u "dubithal" --password-stdin'
                 }
             }
         }
