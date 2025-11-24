@@ -10,7 +10,6 @@ pipeline {
     }
     
     environment {
-        DOCKER_HOST = 'tcp://localhost:2375'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         FLASK_IMAGE = "dubithal/k8s-weather-app"
     }
