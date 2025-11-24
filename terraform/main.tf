@@ -70,12 +70,11 @@ resource "helm_release" "vault" {
 }
 
 locals {
-  # Split the multi-document YAML into a list of individual YAML document strings
   local_path_manifest_strings = split("---", data.http.local_path_storage.response_body)
 }
 
 resource "kubernetes_manifest" "local_path_provisioner" {
-  # Iterate over the list of YAML strings, filtering out any empty ones
+
   for_each = {
     for i, s in local.local_path_manifest_strings : i => s
     if trimspace(s) != "" && !startswith(yamldecode(s).kind, "Namespace")
@@ -88,8 +87,7 @@ resource "kubernetes_manifest" "local_path_provisioner" {
 
 data "http" "local_path_storage" {
   url = "https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml"
-  # Optional: Add a checksum to ensure the file integrity
-  # request_checksum = "sha256:..."
+
 }
 
 resource "helm_release" "jenkins" {
