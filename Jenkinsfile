@@ -65,10 +65,8 @@ pipeline {
     
     post {
         always {
-            echo 'Finalizing build and updating commit status...'
-        }
         success {
-            echo 'Build successful. Updating GitHub commit status to SUCCESS.'
+            echo 'Build successful. Finalizing build and updating GitHub commit status to SUCCESS.'
             updateGitCommitStatus name: 'Jenkins Build', state: 'SUCCESS'
         }
         failure {
