@@ -17,7 +17,7 @@ pipeline {
     
     options {
         gitHubBranchSources {
-            credentialsId('github-credentials')
+            credentialsId('k8sproj-githubAT')
         }
     }
     
