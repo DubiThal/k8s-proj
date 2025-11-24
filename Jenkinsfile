@@ -15,6 +15,12 @@ pipeline {
         FLASK_IMAGE = "dubithal/k8s-weather-app"
     }
     
+    options {
+        gitHubBranchSources {
+            credentialsId('github-credentials')
+        }
+    }
+    
     stages {
         stage('Checkout') {
             steps {
