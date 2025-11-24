@@ -1,5 +1,13 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'build-and-deploy-agent'
+            containers {
+                containerTemplate(name: 'build-tools', image: 'carlossg/docker-access-gcloud-kubectl:latest', command: 'cat', ttyEnabled: true)
+                containerTemplate(name: 'dind', image: 'docker:20.10.7-dind', privileged: true)
+            }
+        }
+    }
     
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
