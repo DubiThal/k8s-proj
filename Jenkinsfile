@@ -65,6 +65,17 @@ pipeline {
     
     post {
         always {
+            echo 'Finalizing build and updating commit status...'
+        }
+        success {
+            echo 'Build successful. Updating GitHub commit status to SUCCESS.'
+            updateGitCommitStatus name: 'Jenkins Build', state: 'SUCCESS'
+        }
+        failure {
+            echo 'Build failed. Updating GitHub commit status to FAILURE.'
+            updateGitCommitStatus name: 'Jenkins Build', state: 'FAILURE'
+        }
+        always {
             container('build-tools') {
                 sh 'docker logout'
             }
