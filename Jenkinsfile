@@ -3,8 +3,8 @@ pipeline {
         kubernetes {
             label 'build-and-deploy-agent'
             containerTemplates([
-                containerTemplate(name: 'build-tools', image: 'google/cloud-sdk:latest', command: 'cat', ttyEnabled: true),
-                containerTemplate(name: 'dind', image: 'docker:20.10.7-dind', privileged: true)
+                containerTemplate(name: 'build-tools', image: 'google/cloud-sdk:478.0.0', command: 'cat', ttyEnabled: true),
+                containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)
             ])
         }
     }
@@ -24,7 +24,7 @@ pipeline {
         
         stage('Build') {
             steps {
-                container('build-tools') {
+                container('dind') {
                     dir('app') {
                         sh "docker build -t ${FLASK_IMAGE}:${BUILD_NUMBER} ."
                         sh "docker tag ${FLASK_IMAGE}:${BUILD_NUMBER} ${FLASK_IMAGE}:latest"
@@ -35,7 +35,7 @@ pipeline {
         
         stage('Login to DockerHub') {
             steps {
-                container('build-tools') {
+                container('dind') {
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
                 }
             }
@@ -43,7 +43,7 @@ pipeline {
         
         stage('Push') {
             steps {
-                container('build-tools') {
+                container('dind') {
                     sh "docker push ${FLASK_IMAGE}:${BUILD_NUMBER}"
                     sh "docker push ${FLASK_IMAGE}:latest"
                 }
@@ -65,7 +65,7 @@ pipeline {
     
     post {
         always {
-            container('build-tools') {
+            container('dind') {
                 sh 'docker logout'
             }
         }
