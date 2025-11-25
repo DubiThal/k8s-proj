@@ -22,7 +22,7 @@ metadata:
   name: jenkins-deployer-rb-default
   namespace: default
 roleRef:
-  apiGroups: rbac.authorization.k8s.io
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: jenkins-deployer-role-default
 subjects:
@@ -47,7 +47,7 @@ metadata:
   name: jenkins-deployer-rb-vault
   namespace: vault
 roleRef:
-  apiGroups: rbac.authorization.k8s.io
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: jenkins-deployer-role-vault
 subjects:
@@ -69,8 +69,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: jenkins-cluster-deployer-crb
-roleRef:
-  apiGroups: rbac.authorization.k8s.io
+roleRef: # Corrected from apiGroups to apiGroup
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: jenkins-cluster-deployer-cr
 subjects:
