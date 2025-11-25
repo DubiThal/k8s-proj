@@ -5,7 +5,6 @@ metadata:
   name: jenkins-agent-sa
   namespace: jenkins
 ---
-# Role for default namespace (for flask app)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -30,7 +29,6 @@ subjects:
   name: jenkins-agent-sa
   namespace: jenkins
 ---
-# Role for vault namespace (for vault service account and secret)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -55,7 +53,6 @@ subjects:
   name: jenkins-agent-sa
   namespace: jenkins
 ---
-# ClusterRole for cluster-scoped resources (like ClusterRoleBinding)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -64,12 +61,18 @@ rules:
 - apiGroups: ["rbac.authorization.k8s.io"]
   resources: ["clusterrolebindings"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["authentication.k8s.io"]
+  resources: ["tokenreviews"]
+  verbs: ["create"]
+- apiGroups: ["authorization.k8s.io"]
+  resources: ["subjectaccessreviews"]
+  verbs: ["create"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: jenkins-cluster-deployer-crb
-roleRef: # Corrected from apiGroups to apiGroup
+roleRef: 
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: jenkins-cluster-deployer-cr

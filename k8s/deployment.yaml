@@ -13,15 +13,15 @@ spec:
     metadata:
       labels:
         app: flask-app
-      annotations:
-        vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "flask-role"
-        vault.hashicorp.com/agent-inject-secret-api-key: "secret/data/flask-config"
-        vault.hashicorp.com/agent-inject-template-api-key: |
-          {{- with secret "secret/data/flask-config" -}}
-          export WEATHER_API_KEY="{{ .Data.data.API_KEY }}"
-          {{- end }}
-        vault.hashicorp.com/tls-skip-verify: "true" 
+      # annotations:
+      #   vault.hashicorp.com/agent-inject: "true"
+      #   vault.hashicorp.com/role: "flask-role"
+      #   vault.hashicorp.com/agent-inject-secret-api-key: "secret/data/flask-config"
+      #   vault.hashicorp.com/agent-inject-template-api-key: |
+      #     {{- with secret "secret/data/flask-config" -}}
+      #     export WEATHER_API_KEY="{{ .Data.data.API_KEY }}"
+      #     {{- end }}
+      #   vault.hashicorp.com/tls-skip-verify: "true" 
     spec:
       serviceAccountName: flask-service-account
       containers:
