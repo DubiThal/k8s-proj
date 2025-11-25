@@ -5,7 +5,7 @@ pipeline {
             containerTemplates([
                 containerTemplate(name: 'build-tools', image: 'google/cloud-sdk:478.0.0', command: 'cat', ttyEnabled: true),
                 containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)
-            ]),
+            ])
             serviceAccount: 'jenkins-agent-sa'
         }
     }
