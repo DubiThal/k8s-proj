@@ -30,7 +30,7 @@ server:
   securityContext:
     runAsNonRoot: true
     runAsUser: 100
+    fsGroup: 1000
 
 ui:
   enabled: true
-

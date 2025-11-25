@@ -6,12 +6,6 @@ data "kubernetes_secret" "grafana" {
   depends_on = [helm_release.grafana]
 }
 
-output "grafana_admin_password" {
-  value       = data.kubernetes_secret.grafana.data["admin-password"]
-  sensitive   = true
-  description = "Run 'terraform output -raw grafana_admin_password' to see the value."
-}
-
 output "grafana_pass" {
   value = "Run 'terraform output -raw grafana_admin_password' to see the value."
 }

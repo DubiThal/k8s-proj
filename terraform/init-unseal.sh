@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAMESPACE="monitoring"
+NAMESPACE="vault"
 VAULT_POD=$(kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=vault -o jsonpath="{.items[0].metadata.name}")
 
 echo "[*] Initializing Vault..."
@@ -19,4 +19,3 @@ echo "[*] Root Token: $ROOT_TOKEN"
 
 echo "[*] Logging in to Vault..."
 kubectl exec -n $NAMESPACE $VAULT_POD -- vault login $ROOT_TOKEN
-
