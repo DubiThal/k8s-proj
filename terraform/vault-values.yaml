@@ -17,7 +17,10 @@ server:
   dataStorage:
     enabled: true
     size: 1Gi
-    storageClass: "standard"
+    storageClass: "local-path"
+
+  volumePermissions:
+    enabled: true
 
   resources:
     limits:
@@ -29,7 +32,11 @@ server:
 
   securityContext:
     runAsNonRoot: true
-    runAsUser: 100
+    runAsUser: 1000
+    fsGroup: 1000
+  
+  podSecurityContext:
+    runAsNonRoot: true
     fsGroup: 1000
 
 ui:
