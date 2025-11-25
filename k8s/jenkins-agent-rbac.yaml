@@ -1,0 +1,79 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-agent-sa
+  namespace: jenkins
+---
+# Role for default namespace (for flask app)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-deployer-role-default
+  namespace: default
+rules:
+- apiGroups: ["", "apps", "autoscaling"]
+  resources: ["deployments", "services", "horizontalpodautoscalers", "serviceaccounts"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-deployer-rb-default
+  namespace: default
+roleRef:
+  apiGroups: rbac.authorization.k8s.io
+  kind: Role
+  name: jenkins-deployer-role-default
+subjects:
+- kind: ServiceAccount
+  name: jenkins-agent-sa
+  namespace: jenkins
+---
+# Role for vault namespace (for vault service account and secret)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-deployer-role-vault
+  namespace: vault
+rules:
+- apiGroups: ["", "apps", "autoscaling"]
+  resources: ["deployments", "services", "horizontalpodautoscalers", "serviceaccounts", "secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-deployer-rb-vault
+  namespace: vault
+roleRef:
+  apiGroups: rbac.authorization.k8s.io
+  kind: Role
+  name: jenkins-deployer-role-vault
+subjects:
+- kind: ServiceAccount
+  name: jenkins-agent-sa
+  namespace: jenkins
+---
+# ClusterRole for cluster-scoped resources (like ClusterRoleBinding)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: jenkins-cluster-deployer-cr
+rules:
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["clusterrolebindings"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-cluster-deployer-crb
+roleRef:
+  apiGroups: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: jenkins-cluster-deployer-cr
+subjects:
+- kind: ServiceAccount
+  name: jenkins-agent-sa
+  namespace: jenkins

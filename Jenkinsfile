@@ -5,7 +5,8 @@ pipeline {
             containerTemplates([
                 containerTemplate(name: 'build-tools', image: 'google/cloud-sdk:478.0.0', command: 'cat', ttyEnabled: true),
                 containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)
-            ])
+            ]),
+            serviceAccount: 'jenkins-agent-sa'
         }
     }
     
@@ -53,9 +54,10 @@ pipeline {
             steps {
                 container('build-tools') {
                     echo "Deploying application to Kubernetes..."
-                    sh "kubectl apply -f k8s/"
-                    sh "kubectl rollout restart deployment/k8s-weather-app-deployment"
-                    sh "kubectl rollout status deployment/k8s-weather-app-deployment"
+                    sh "kubectl apply -f k8s/flask-sa.yaml -f k8s/deployment.yaml -f k8s/hpa.yaml -f k8s/service.yaml --namespace default"
+                    sh "kubectl apply -f k8s/vault-service-account.yaml" # This contains resources for vault namespace and cluster-scoped
+                    sh "kubectl rollout restart deployment/flask-app --namespace default"
+                    sh "kubectl rollout status deployment/flask-app --namespace default"
                     echo "Application deployed successfully!"
                 }
             }
