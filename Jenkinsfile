@@ -66,8 +66,16 @@ pipeline {
     
     post {
         always {
-            container('dind') {
-                sh 'docker logout'
+            agent {
+                kubernetes {
+                    label 'build-and-deploy-agent'
+                    containerTemplates([containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)])
+                }
+            }
+            steps {
+                container('dind') {
+                    sh 'docker logout'
+                }
             }
         }
     }
