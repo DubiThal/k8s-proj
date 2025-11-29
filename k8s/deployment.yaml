@@ -18,10 +18,9 @@ spec:
         vault.hashicorp.com/role: "flask-app-role"
         vault.hashicorp.com/agent-inject-secret-api-key: "secret/data/weather-app/config"
         vault.hashicorp.com/agent-inject-template-api-key: |
-          {{- with secret "secret/dataweather-app/config" -}}
-          export WEATHER_API_KEY="{{ .Data.data.api_key }}"
+          {{- with secret "secret/data/weather-app/config" -}}
+          export WEATHER_API_KEY="{{ index .Data.data "api-key" }}"
           {{- end }}
-      #   vault.hashicorp.com/tls-skip-verify: "true" 
     spec:
       serviceAccountName: flask-service-account
       containers:
