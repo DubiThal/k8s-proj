@@ -3,8 +3,19 @@ pipeline {
         kubernetes {
             label 'build-and-deploy-agent'
             containerTemplates([
-                containerTemplate(name: 'build-tools', image: 'google/cloud-sdk:478.0.0', command: 'cat', ttyEnabled: true),
-                containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)
+                containerTemplate(
+                    name: 'build-tools', 
+                    image: 'google/cloud-sdk:478.0.0', 
+                    command: 'cat', 
+                    ttyEnabled: true,
+                    resources: 'cpu: "250m", memory: "256Mi"' // Request resources for kubectl
+                ),
+                containerTemplate(
+                    name: 'dind', 
+                    image: 'docker:26.1.4-dind', 
+                    privileged: true,
+                    resources: 'cpu: "1000m", memory: "1024Mi"' // Request more resources for Docker builds
+                )
             ])
             serviceAccount 'jenkins-agent-sa'
         }
@@ -66,16 +77,9 @@ pipeline {
     
     post {
         always {
-            agent {
-                kubernetes {
-                    label 'build-and-deploy-agent'
-                    containerTemplates([containerTemplate(name: 'dind', image: 'docker:26.1.4-dind', privileged: true)])
-                }
-            }
-            steps {
-                container('dind') {
-                    sh 'docker logout'
-                }
+            // This command will run on the agent defined at the top level of the pipeline.
+            container('dind') {
+                sh 'docker logout'
             }
         }
     }
