@@ -83,15 +83,5 @@ pipeline {
                 }
             }
         }
-        success {
-            script {
-                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'k8sproj-githubAT', state: 'SUCCESS', message: 'Build succeeded!'
-            }
-        }
-        failure {
-            script {
-                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'k8sproj-githubAT', state: 'FAILURE', message: 'Build failed.'
-            }
-        }
     }
 }
