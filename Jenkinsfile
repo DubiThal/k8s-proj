@@ -8,19 +8,23 @@ pipeline {
                     image: 'google/cloud-sdk:478.0.0', 
                     command: 'cat', 
                     ttyEnabled: true,
-                    resources: 'cpu: "250m", memory: "256Mi"' // Request resources for kubectl
+                    resources: 'cpu: "250m", memory: "256Mi"' 
                 ),
                 containerTemplate(
                     name: 'dind', 
                     image: 'docker:26.1.4-dind', 
                     privileged: true,
-                    resources: 'cpu: "1000m", memory: "1024Mi"' // Request more resources for Docker builds
+                    resources: 'cpu: "1000m", memory: "1024Mi"' 
                 )
             ])
             serviceAccount 'jenkins-agent-sa'
         }
     }
     
+    options {
+        buildStatus(context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3')
+    }
+
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         FLASK_IMAGE = "dubithal/k8s-weather-app"
@@ -77,9 +81,10 @@ pipeline {
     
     post {
         always {
-            // This command will run on the agent defined at the top level of the pipeline.
-            container('dind') {
-                sh 'docker logout'
+            script {
+                container('dind') {
+                    sh 'docker logout'
+                }
             }
         }
     }
