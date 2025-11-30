@@ -21,9 +21,9 @@ pipeline {
         }
     }
     
-    properties([
-        githubProjectProperty(projectUrlStr: 'https://github.com/DubiThal/k8s-proj/')
-    ])
+    options {
+        properties([githubProjectProperty(projectUrlStr: 'https://github.com/DubiThal/k8s-proj/')])
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         FLASK_IMAGE = "dubithal/k8s-weather-app"
