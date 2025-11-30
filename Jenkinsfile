@@ -21,9 +21,6 @@ pipeline {
         }
     }
     
-    options {
-        properties([githubProjectProperty(projectUrlStr: 'https://github.com/DubiThal/k8s-proj/')])
-    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         FLASK_IMAGE = "dubithal/k8s-weather-app"
@@ -84,6 +81,16 @@ pipeline {
                 container('dind') {
                     sh 'docker logout'
                 }
+            }
+        }
+        success {
+            script {
+                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3', state: 'SUCCESS', message: 'Build succeeded!'
+            }
+        }
+        failure {
+            script {
+                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3', state: 'FAILURE', message: 'Build failed.'
             }
         }
     }
