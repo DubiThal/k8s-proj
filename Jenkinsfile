@@ -85,12 +85,12 @@ pipeline {
         }
         success {
             script {
-                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3', state: 'SUCCESS', message: 'Build succeeded!'
+                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'k8sproj-githubAT', state: 'SUCCESS', message: 'Build succeeded!'
             }
         }
         failure {
             script {
-                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3', state: 'FAILURE', message: 'Build failed.'
+                updateGitcommitStatus context: 'ci/jenkins', credentialsId: 'k8sproj-githubAT', state: 'FAILURE', message: 'Build failed.'
             }
         }
     }
