@@ -21,10 +21,9 @@ pipeline {
         }
     }
     
-    options {
-        buildStatus(context: 'ci/jenkins', credentialsId: 'github-k8s-AT-v3')
-    }
-
+    properties([
+        githubProjectProperty(projectUrlStr: 'https://github.com/DubiThal/k8s-proj/')
+    ])
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials') 
         FLASK_IMAGE = "dubithal/k8s-weather-app"
